@@ -1,8 +1,8 @@
 defmodule ExCrowdin.Storage do
   @moduledoc """
-  Work with Crowdin source strings
+  Work with Crowdin storage
 
-  Crowdin API reference: https://support.crowdin.com/api/v2/#tag/Source-Strings
+  Crowdin API reference: https://support.crowdin.com/api/v2/#tag/Storage
   """
 
   alias ExCrowdin.API
@@ -21,5 +21,41 @@ defmodule ExCrowdin.Storage do
         "Content-Type" => "application/octet-stream"
       }
     )
+  end
+
+  def get(storage_id) do
+    API.request("/storages/#{storage_id}", :get)
+  end
+
+  def delete(storage_id) do
+    API.request("/storages/#{storage_id}", :delete)
+  end
+
+  def list!() do
+    case list() do
+      {:ok, result} -> result
+      {:error, error} -> raise error
+    end
+  end
+
+  def add!(body, filename) do
+    case add(body, filename) do
+      {:ok, result} -> result
+      {:error, error} -> raise error
+    end
+  end
+
+  def get!(storage_id) do
+    case get(storage_id) do
+      {:ok, result} -> result
+      {:error, error} -> raise error
+    end
+  end
+
+  def delete!(storage_id) do
+    case delete(storage_id) do
+      {:ok, result} -> result
+      {:error, error} -> raise error
+    end
   end
 end

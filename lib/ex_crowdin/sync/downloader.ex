@@ -22,7 +22,15 @@ defmodule ExCrowdin.Sync.Downloader do
       Enum.each(locales, fn locale ->
         with {:ok, data} <- ExCrowdin.get_crowdin_translations(locale, field, file_id) do
           Enum.each(data, fn response ->
-            update_translations(repo, query, field, string_ids_field, locale, response, sync_module)
+            update_translations(
+              repo,
+              query,
+              field,
+              string_ids_field,
+              locale,
+              response,
+              sync_module
+            )
           end)
         end
       end)
