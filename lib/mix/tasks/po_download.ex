@@ -23,7 +23,7 @@ defmodule Mix.Tasks.Crowdin.PoDownload do
         Mix.shell().error("Missing file argument: <path_to_po_file>")
 
         Mix.shell().error(
-          "Usage: mix crowdin.po_download path/to/po/file.po --create --remote-name=name"
+          "Usage: mix crowdin.po_download path/to/po/file.po --language=language --remote-name=name"
         )
     end
   end
@@ -37,6 +37,7 @@ defmodule Mix.Tasks.Crowdin.PoDownload do
          {:ok, %{status_code: 200, body: content}} <- HTTPoison.get(url),
          :ok <- File.write(path, content) do
       Mix.shell().info("Successfully downloaded translations to: #{path}")
+      :ok
     else
       {:error, reason} ->
         Mix.shell().error("Error: #{inspect(reason)}")

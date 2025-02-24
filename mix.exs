@@ -30,10 +30,10 @@ defmodule ExCrowdin.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       {:jason, "~> 1.1"},
-      {:httpoison, "~> 1.0"},
+      {:httpoison, "~> 2.0"},
       {:mox, "~> 0.5", only: :test},
       {:ex_doc, "~> 0.18", only: :dev},
-      {:ecto, ">= 3.0.0"}
+      {:ecto, "~> 3.0"}
     ]
   end
 
