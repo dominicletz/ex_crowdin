@@ -5,7 +5,6 @@ defmodule Mix.Tasks.Crowdin.PoDownload do
 
   use Mix.Task
 
-  @impl Mix.Task
   # Correct format is:
   #
   # mix crowdin.po_download path/to/po/file.po --language=pt-BR --remote-name="default.pot"
@@ -17,9 +16,8 @@ defmodule Mix.Tasks.Crowdin.PoDownload do
         remote_name = opts[:remote_name] || "default.pot"
         download_po_file(path, language, remote_name)
 
-      other ->
+      _other ->
         # Warn about missing arguments
-        IO.inspect(other)
         Mix.shell().error("Missing file argument: <path_to_po_file>")
 
         Mix.shell().error(

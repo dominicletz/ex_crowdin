@@ -5,7 +5,6 @@ defmodule Mix.Tasks.Crowdin.PotUpload do
 
   use Mix.Task
 
-  @impl Mix.Task
   # Correct format is:
   #
   # mix ex_crowdin.po_update path/to/po/file.po --update-existing --remote-name=filename
@@ -16,9 +15,8 @@ defmodule Mix.Tasks.Crowdin.PotUpload do
       {opts, [path | _], _} ->
         update_po_file(path, opts)
 
-      other ->
+      _other ->
         # Warn about missing arguments
-        IO.inspect(other)
         Mix.shell().error("Missing file argument: <path_to_po_file>")
 
         Mix.shell().error(
