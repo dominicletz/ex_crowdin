@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # for testing with real access token
 config :ex_crowdin,
