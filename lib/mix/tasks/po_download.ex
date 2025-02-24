@@ -9,6 +9,8 @@ defmodule Mix.Tasks.Crowdin.PoDownload do
   #
   # mix crowdin.po_download path/to/po/file.po --language=pt-BR --remote-name="default.pot"
   def run(args) do
+    Mix.Task.reenable(__MODULE__)
+
     OptionParser.parse(args, strict: [language: :string, remote_name: :string])
     |> case do
       {opts, [path | _], _} ->
