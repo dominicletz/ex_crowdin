@@ -24,7 +24,7 @@ ExCrowdin.Storage.list!()
 There is a `mix crowdin.po_update` task that updates a PO file in Crowdin.
 
 ```elixir
-mix crowdin.po_update priv/gettext/default.po --create
+mix crowdin.po_update priv/gettext/default.pot --create
 ```
 
 ## Installation
