@@ -50,7 +50,7 @@ defmodule ExCrowdin.Config do
 
   def resolve(key, default) when is_atom(key) do
     Application.get_env(:ex_crowdin, key, default)
-    |> expand_value()
+    |> expand_value() || raise "Missing config value :ex_crowdin.#{key}"
   end
 
   def resolve(key, _) do

@@ -9,8 +9,13 @@ defmodule ExCrowdin do
       {:ok, file_id} = ExCrowdin.get_file_id(%Job{}, :title)
   """
   @spec get_file_id(struct(), atom()) :: {:ok, binary()} | {:error, any()}
-  def get_file_id(struct, field) do
+  def get_file_id(struct, field) when is_struct(struct) do
     Uploader.get_file_id(struct, field)
+  end
+
+  @spec get_file_id(binary(), binary(), binary()) :: {:ok, binary()} | {:error, any()}
+  def get_file_id(remote_name, file_content \\ nil, title \\ nil, type \\ "gettext") do
+    Uploader.get_file_id(remote_name, file_content, title, type)
   end
 
   @doc """
@@ -21,8 +26,13 @@ defmodule ExCrowdin do
       {:ok, %{"data" => %{"id" => id}}} = ExCrowdin.create_crowdin_file(%Job{})
   """
   @spec create_crowdin_file(struct()) :: list({:ok, binary()} | {:error, any()})
-  def create_crowdin_file(struct) do
+  def create_crowdin_file(struct) when is_struct(struct) do
     Uploader.create_crowdin_file(struct)
+  end
+
+  @spec create_crowdin_file(binary(), binary(), binary()) :: {:ok, binary()} | {:error, any()}
+  def create_crowdin_file(remote_name, file_content, title \\ nil, type \\ "gettext") do
+    Uploader.create_crowdin_file(remote_name, file_content, title, type)
   end
 
   @doc """

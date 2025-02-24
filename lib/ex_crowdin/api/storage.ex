@@ -11,14 +11,14 @@ defmodule ExCrowdin.Storage do
     API.request("/storages", :get)
   end
 
-  def add(body, filename) do
+  def add(body, filename, content_type \\ "application/octet-stream") do
     API.request(
       "/storages",
       :post,
       body,
       %{
-        "Crowdin-API-FileName" => filename,
-        "Content-Type" => "application/octet-stream"
+        "Crowdin-API-FileName": filename,
+        "Content-Type": content_type
       }
     )
   end
@@ -38,8 +38,8 @@ defmodule ExCrowdin.Storage do
     end
   end
 
-  def add!(body, filename) do
-    case add(body, filename) do
+  def add!(body, filename, content_type \\ "application/octet-stream") do
+    case add(body, filename, content_type) do
       {:ok, result} -> result
       {:error, error} -> raise error
     end

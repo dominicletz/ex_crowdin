@@ -77,11 +77,14 @@ defmodule ExCrowdin.Uploader do
     end)
   end
 
-  def create_crowdin_file(struct, field) do
+  def create_crowdin_file(struct, field) when is_struct(struct) do
     filename = get_filename(struct, field)
+    create_crowdin_file(filename, " ", get_title(struct, field), "macosx")
+  end
 
-    with {:ok, storage_response} <- ExCrowdinStorage.add(" ", filename),
-         file_body <- build_file_body(struct, storage_response["data"]["id"], field),
+  def create_crowdin_file(remote_name, file_content, title \\ nil, type \\ "gettext") do
+    with {:ok, storage_response} <- ExCrowdinStorage.add(file_content, remote_name),
+         file_body <- build_file_body(storage_response["data"]["id"], remote_name, title, type),
          {:ok, file_response} <- ExCrowdinFile.add(file_body) do
       file_id = file_response["data"]["id"]
       Logger.info("Init file successfully with file ID #{file_id}")
@@ -95,28 +98,34 @@ defmodule ExCrowdin.Uploader do
   end
 
   @spec get_file_id(struct(), atom()) :: {:ok, binary()} | {:error, any()}
-  def get_file_id(struct, field) do
-    filename = get_filename(struct, field)
+  def get_file_id(struct, field) when is_struct(struct) do
+    get_file_id(get_filename(struct, field), " ", get_title(struct, field), "macosx")
+  end
 
-    with {:ok, response} <- ExCrowdinFile.list(%{"filter" => filename}) do
+  def get_file_id(remote_name, file_content \\ nil, title \\ nil, type \\ "gettext") do
+    with {:ok, response} <- ExCrowdinFile.list(%{"filter" => remote_name}) do
       item_response = List.first(response["data"])
 
       if item_response && item_response["data"] do
         {:ok, item_response["data"]["id"]}
       else
-        with {:ok, file_response} <- create_crowdin_file(struct, field) do
-          {:ok, file_response["data"]["id"]}
+        if file_content do
+          with {:ok, file_response} <- create_crowdin_file(remote_name, file_content, title, type) do
+            {:ok, file_response["data"]["id"]}
+          end
+        else
+          {:error, :not_found}
         end
       end
     end
   end
 
-  defp build_file_body(struct, storage_id, field) do
+  defp build_file_body(storage_id, filename, title, type) do
     %{
       "storageId" => storage_id,
-      "name" => get_filename(struct, field),
-      "title" => get_title(struct, field),
-      "type" => "macosx"
+      "name" => filename,
+      "title" => title,
+      "type" => type
     }
   end
 end

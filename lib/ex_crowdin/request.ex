@@ -9,13 +9,13 @@ defmodule ExCrowdin.Request do
   alias ExCrowdin.Config
 
   @default_opts [
-    timeout: 15_000,
-    recv_timeout: 15_000
+    timeout: 60_000,
+    recv_timeout: 60_000
   ]
 
   @callback request(String.t(), String.t(), any(), list, list) :: {:ok, map} | {:error, any()}
   def request(method, req_url, body, req_headers, opts \\ @default_opts) do
-    Logger.debug(req_url)
+    Logger.debug("#{method} #{req_url}")
 
     HTTPoison.request(method, req_url, body, req_headers, opts)
     |> handle_response()
