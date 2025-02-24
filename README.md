@@ -21,11 +21,35 @@ ExCrowdin.Storage.list!()
 
 ## Working with PO files
 
-There is a `mix crowdin.po_update` task that updates a PO file in Crowdin.
+There is a `mix crowdin.pot_upload` task that uploads a POT file to Crowdin.
 
 ```elixir
-mix crowdin.po_update priv/gettext/default.pot --create
+mix crowdin.pot_upload priv/gettext/default.pot
 ```
+
+There is a `mix crowdin.po_download` task that downloads a PO file from Crowdin.
+
+```elixir
+mix crowdin.po_download priv/gettext/pt/default.po --language=pt-BR
+```
+
+The idea is to combine this with the rest of your gettext workflow for example using an alias()  like this in your `mix.exs`:
+
+```elixir
+  defp aliases() do
+    [
+      gettext: [
+        "gettext.extract",
+        "crowdin.pot_upload priv/gettext/default.pot",
+        "gettext.merge priv/gettext --locale de --no-fuzzy",
+        "crowdin.po_download priv/gettext/de/LC_MESSAGES/default.po --language=de",
+      ],
+    ]
+  end
+```
+
+So most of the translation flow can be handled via the Crowdin UI and changes can be merged both ways.
+
 
 ## Installation
 

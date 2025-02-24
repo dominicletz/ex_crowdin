@@ -1,6 +1,6 @@
-defmodule Mix.Tasks.Crowdin.PoUpdate do
+defmodule Mix.Tasks.Crowdin.PotUpload do
   @moduledoc """
-  Update PO files with Crowdin
+  Upload a POT file to Crowdin
   """
 
   use Mix.Task
@@ -34,7 +34,7 @@ defmodule Mix.Tasks.Crowdin.PoUpdate do
     with {:ok, file_id} <- ExCrowdin.get_file_id(remote_name, nil, remote_name, "gettext"),
          {:ok, file_content} <- File.read(path),
          {:ok, %{"data" => %{"id" => storage_id}}} <-
-           ExCrowdin.Storage.add(file_content, remote_name <> ".pot", "text/plain; charset=UTF-8") do
+           ExCrowdin.Storage.add(file_content, remote_name) do
       ExCrowdin.File.update(file_id, %{
         "storageId" => storage_id,
         "name" => remote_name,
